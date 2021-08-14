@@ -6,14 +6,12 @@ export function useCache(cacheName, key) {
 
   useEffect(() => {
     const cache = localStorage.getItem(cacheName);
-    if (!cache || !cache.key) {
-      setValue({});
-    } else {
-      const obj = {};
+    const obj = {};
+    if (cache && cache.key) {
       obj.data = JSON.parse(cache.key);
-      setValue(obj);
     }
-  }, [value]);
+    setValue(obj);
+  }, [cacheName, key]);
 
   return value;
 }
