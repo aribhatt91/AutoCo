@@ -33,7 +33,7 @@ export default function Detail() {
     });
   };
   useEffect(() => {
-    let interval = setInterval(refresh, 120000);
+    //let interval = setInterval(refresh, 120000);
     //return clearInterval(interval);
   }, []);
 
@@ -63,7 +63,7 @@ export default function Detail() {
           </article>
         )}
         {!state.loading && (!state.data || !state.data["Symbol"]) && (
-          <>
+          <div className="not-found-container">
             <NotFound />
             <div className="btn-container">
               <button
@@ -75,7 +75,7 @@ export default function Detail() {
                 Refresh
               </button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>

@@ -3,15 +3,21 @@ import { Link } from "react-router-dom";
 import { useDebounce } from "../../adapter/hooks/useDebounce";
 import CONSTANTS from "../../data/constants.json";
 import axios from "axios";
+import Loading from "../Loading";
+import "./index.css";
 
-function AutoComplete({ loading, selectFn, items }) {
+function AutoComplete({ loading, items }) {
   return (
     <div className="autocomplete-box">
-      {loading && <div></div>}
+      {loading && (
+        <div className="loading-container">
+          <Loading />
+        </div>
+      )}
       {!loading && items && items.length > 0 && (
-        <ul onClick={selectFn}>
+        <ul>
           {items.map((item, index) => (
-            <li className="autocomplete-list-item">
+            <li className="autocomplete-list-item" key={item["1. symbol"]}>
               <Link to={"/stock/" + item["1. symbol"]}>
                 {item["1. symbol"]}
               </Link>

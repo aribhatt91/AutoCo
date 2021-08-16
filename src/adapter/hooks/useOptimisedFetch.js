@@ -3,16 +3,6 @@ import { useState } from "react";
 import axios from "axios";
 import { useCache } from "./useCache";
 
-const setLocalStorage = (cacheName, key, data) => {
-  try {
-    let ls = window.localStorage.getItem(cacheName) || {};
-    let cache = JSON.parse(ls);
-    cache[key] = data;
-    window.localStorage.setItem(cacheName, JSON.stringify(cache));
-  } catch (err) {
-    //console.error('Error fetching')
-  }
-};
 const useOptimisedFetch = ({
   cacheName,
   key,
@@ -25,7 +15,7 @@ const useOptimisedFetch = ({
   const [response, setResponse] = useState(null);
   const [error, setError] = useState("");
   const [loading, setloading] = useState(true);
-  const cache = useCache(cacheName, key);
+  const { cached, setCache } = useCache(cacheName, key);
 
   const fetchData = async () => {
     try {
@@ -36,7 +26,7 @@ const useOptimisedFetch = ({
       );
       const data = res.data;
       setResponse(data);
-      setLocalStorage(cacheName, key, data);
+      setCache(cacheName, key, data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -48,18 +38,16 @@ const useOptimisedFetch = ({
     if (!fromCache) {
       fetchData();
     } else {
-      if (cache) {
-        if (cache.data) {
-          setResponse(cache.data);
+      if (cached) {
+        if (cached.data) {
+          setResponse(cached.data);
           setloading(false);
         } else {
           fetchData();
         }
       }
     }
-
-    //fetchData();
-  }, [method, url, body, headers, cache]);
+  }, [method, url, body, headers, cached, fromCache]);
 
   return { response, error, loading };
 };
